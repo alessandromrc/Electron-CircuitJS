@@ -1,0 +1,15 @@
+{
+  "name": "circuitjs",
+  "version": "1.0.0",
+  "description": "circuitsjs made in electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . app --platform win32 --arch x64 --asar --out dist/",
+    "setup": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/"
+  },
+  "devDependencies": {
+    "electron": "^22.1.0",
+    "electron-packager": "*"
+  }
+}
