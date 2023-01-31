@@ -1,5 +1,5 @@
 # Electron-CircuitJS
-A port of CircutJS for electron that implements dark mode.
+A port of CircuitJS for Electron that implements dark mode.
 ![screenshot](https://raw.githubusercontent.com/alessandromrc/Electron-CircuitJS/main/assets/screenshot.png)
 
 
