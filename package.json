@@ -6,7 +6,8 @@
   "icon": "circuitjs.ico",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --icon=./circuitjs.ico app --platform win32 --arch x64 --asar --out dist/",
+    "build": "electron-packager . CircuitJS --icon=./circuitjs.ico app --platform win32 --arch x64 --asar --out dist/",
+    "build:macarm": "electron-packager . CircuitJS --icon=./circuitjs.icns app --platform darwin --arch arm64 --asar --out dist/",
     "setup": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@
 #define MyAppVersion "1.0"
 #define MyAppPublisher "alessandromrc"
 #define MyAppURL "alessandromarcon.dev"
-#define MyAppExeName "app.exe"
+#define MyAppExeName "CircuitJS.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
