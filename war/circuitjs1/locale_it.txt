@@ -598,6 +598,7 @@
 "Scopes"="Oscilloscopi"
 "Select Y"="Seleziona Y"
 "Select/Drag Sel"="Seleziona/Trascina"
+"Separate All"="Separa Tutto"
 "Sequential Logic"="Logica Sequenziale"
 "Series Resonance"="Risonanza Serie"
 "Series/Parallel"="Serie/Parallelo"

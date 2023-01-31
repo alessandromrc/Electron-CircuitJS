@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, nativeTheme } = require('electron')
 const path = require('path')
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 
 function createWindow() {
@@ -10,16 +12,19 @@ function createWindow() {
     height: 1024,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#FFFFFFFF',
-      symbolColor: '#00000'
+      color: '#121313',
+      symbolColor: '#FFFFFF'
     },
     webPreferences: {
+      nodeIntegration: false,
       preload: path.join(__dirname, 'preload.js')
     }
   })
 
   // and load the index.html of the app.
   mainWindow.loadFile('./war/circuitjs.html')
+
+
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
