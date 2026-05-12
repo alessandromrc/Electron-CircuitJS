@@ -1,0 +1,81 @@
+name: Sync upstream CircuitJS1
+
+on:
+  workflow_dispatch:
+    inputs:
+      upstream_branch:
+        description: 'Upstream git branch'
+        required: false
+        default: 'master'
+      upstream_repo:
+        description: 'Upstream git URL (https only)'
+        required: false
+        default: 'https://github.com/pfalstad/circuitjs1.git'
+  schedule:
+    # Mondays 06:15 UTC
+    - cron: '15 6 * * 1'
+
+concurrency:
+  group: sync-upstream-${{ github.repository }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Clone upstream circuitjs1
+        env:
+          UPSTREAM_REPO: ${{ inputs.upstream_repo || 'https://github.com/pfalstad/circuitjs1.git' }}
+          UPSTREAM_BRANCH: ${{ inputs.upstream_branch || 'master' }}
+        run: |
+          set -euo pipefail
+          case "$UPSTREAM_REPO" in https://*) ;; *) echo "Only https upstream URLs are allowed."; exit 1;; esac
+          git clone --depth 1 --branch "$UPSTREAM_BRANCH" "$UPSTREAM_REPO" upstream/circuitjs1
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          build-root-directory: upstream/circuitjs1
+          cache-read-only: false
+
+      - name: Compile GWT and make site
+        working-directory: upstream/circuitjs1
+        run: |
+          chmod +x gradlew
+          ./gradlew compileGwt makeSite --no-daemon --console=plain
+
+      - name: Merge upstream site into war
+        run: |
+          set -euo pipefail
+          rsync -a --delete upstream/circuitjs1/site/ war/
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore(war): sync upstream circuitjs1'
+          title: 'chore(war): sync upstream circuitjs1'
+          body: |
+            Automated sync from upstream (see workflow run for exact repo/branch).
+
+            - Built with `./gradlew compileGwt makeSite`
+            - Merged `site/` → `war/`
+
+            **Next steps:** review the diff, run `npm start`, and merge when satisfied.
+          branch: chore/sync-upstream-circuitjs
+          delete-branch: true
