@@ -1,5 +1,8 @@
 name: Sync upstream CircuitJS1
 
+# Notes:
+# - Scheduled runs (Mondays) only execute on the repository DEFAULT branch.
+# - "Run workflow" (workflow_dispatch) only appears after this file exists on the default branch.
 on:
   workflow_dispatch:
     inputs:
@@ -12,8 +15,12 @@ on:
         required: false
         default: 'https://github.com/pfalstad/circuitjs1.git'
   schedule:
-    # Mondays 06:15 UTC
+    # Mondays 06:15 UTC (scheduled workflows run only on the default branch)
     - cron: '15 6 * * 1'
+  push:
+    branches-ignore:
+      # Avoid re-running when the sync PR branch is updated by the bot
+      - chore/sync-upstream-circuitjs
 
 concurrency:
   group: sync-upstream-${{ github.repository }}
